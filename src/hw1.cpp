@@ -4,6 +4,9 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
+#include "mathclass.h"
+
+using namespace jhm;
 
 GLdouble rotMatrix[16] =
 {
@@ -20,14 +23,26 @@ bool leftButton = false;
 GLfloat mousePosX, mousePosY;
 
 /* vectors that makes the rotation and translation of the cube */
-float eye[3] = { 0.0f, 0.0f, 100.0f };
-float ori[3] = { 0.0f, 0.0f, 0.0f };
-float rot[3] = { 0.0f, 0.0f, 0.0f };
+vector eye(0.0f, 0.0f, 100.0f);
+vector ori(0.0f, 0.0f, 0.0f);
+vector up(0.0f, 1.0f, 0.0f);
+
+vector loadBasisY() {
+  return up.normalize();
+}
+
+vector loadBasisZ() {
+  return (eye - ori).normalize();
+}
+
+vector loadBasisX() {
+  return loadBasisY() * loadBasisZ();
+}
 
 void loadGlobalCoord()
 {
 	glLoadIdentity();
-	gluLookAt(eye[0], eye[1], eye[2], ori[0], ori[1], ori[2], 0, 1, 0);
+	gluLookAt(eye[0], eye[1], eye[2], ori[0], ori[1], ori[2], up[0], up[1], up[2]);
 	glMultMatrixd(rotMatrix);
 }
 
@@ -135,11 +150,32 @@ void resize(int w, int h) {
 	glLoadIdentity();
 }
 
+#define TRANSLATE_CONSTANT 0.5
+
+void translate(vector v, double len) {
+  vector transVec = v * len;
+  eye += transVec;
+  ori += transVec;
+  loadGlobalCoord();
+}
+
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 27:
 		exit(0);
 		break;
+  case 'w':
+    translate(loadBasisY(), -1 * TRANSLATE_CONSTANT);
+    break;
+  case 'a':
+    translate(loadBasisX(), TRANSLATE_CONSTANT);
+    break;
+  case 's':
+    translate(loadBasisY(), TRANSLATE_CONSTANT);
+    break;
+  case 'd':
+    translate(loadBasisX(), -1 * TRANSLATE_CONSTANT);
+    break;
 	default:
 		break;
 	}
