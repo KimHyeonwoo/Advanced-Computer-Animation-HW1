@@ -22,6 +22,7 @@ int width, height;
 bool leftButton = false;
 bool rightButton = false;
 GLfloat mousePosX, mousePosY;
+double lastX, lastY, lastZ;
 
 /* vectors that makes the rotation and translation of the cube */
 vector eye(0.0f, 0.0f, 100.0f);
@@ -62,7 +63,37 @@ void translate(vector v, double len) {
 
 void glutMotion(int x, int y)
 {
-	if ( rightButton ) {
+  if (leftButton) {
+    double trackballX = (x - 1000.0f) / 20;
+    double trackballY = (1000.0f - y) / 20;
+    double trackballZ;
+    position tmp(trackballX, trackballY, 0);
+    double length = tmp.norm();
+
+    if (length <= 40.0f) trackballZ = sqrt(1600 - length * length);
+    else {
+      trackballX = trackballX * 40.0f / length;
+      trackballY = trackballY * 40.0f / length;
+      trackballZ = 0;
+    }
+
+    vector lastVec = loadBasisX() * lastX + loadBasisY() * lastY + loadBasisZ() * lastZ;
+    vector currVec = loadBasisX() * trackballX + loadBasisY() * trackballY + loadBasisZ() * trackballZ;
+    vector rotAxis = (currVec * lastVec).normalize();
+
+    double cosAngle = (lastVec % currVec) / (len(lastVec) * len(currVec));
+    double cosHalfAngle = sqrt((1 + cosAngle) / 2);
+    double sinHalfAngle = sqrt(1 - cosHalfAngle * cosHalfAngle);
+
+    quater rotQuater(cosHalfAngle, sinHalfAngle * rotAxis.x(), sinHalfAngle * rotAxis.y(), sinHalfAngle * rotAxis.z());
+    eye = ori + rotate(rotQuater, eye - ori);
+    up = rotate(rotQuater, up);
+
+    lastX = trackballX;
+    lastY = trackballY;
+    lastZ = trackballZ;
+  }
+	if (rightButton) {
 		double dx = x - mousePosX;
 		double dy = y - mousePosY;
 
@@ -87,15 +118,32 @@ void glutMouse(int button, int state, int x, int y)
 	switch ( button )
 	{
 		case GLUT_LEFT_BUTTON:
+      if (state == GLUT_DOWN)
+      {
+        lastX = (x - 1000.0f) / 20;
+        lastY = (1000.0f - y) / 20;
+        position tmp(lastX, lastY, 0);
+        double length = tmp.norm();
+
+        if (length <= 40.0f) lastZ = sqrt(1600 - length * length);
+        else {
+          lastX = lastX * 40.0f / length;
+          lastY = lastY * 40.0f / length;
+          lastZ = 0;
+        }
+
+        leftButton = true;
+      }
+      else if (state == GLUT_UP) leftButton = false;
 			break;
 		case GLUT_RIGHT_BUTTON:
-			if ( state == GLUT_DOWN )
+			if (state == GLUT_DOWN)
 			{
 				mousePosX = x;
 				mousePosY = y;
 				rightButton = true;
 			}
-			else if ( state == GLUT_UP )
+			else if (state == GLUT_UP)
 			{
 				rightButton = false;
 			}
