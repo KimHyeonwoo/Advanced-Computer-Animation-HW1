@@ -164,6 +164,12 @@ void keyboard(unsigned char key, int x, int y) {
 	case 27:
 		exit(0);
 		break;
+  case 'i':
+    eye.setValue(0.0f, 0.0f, 100.0f);
+    ori.setValue(0.0f, 0.0f, 0.0f);
+    up.setValue(0.0f, 1.0f, 0.0f);
+    loadGlobalCoord();
+    break;
   case 'w':
     translate(loadBasisY(), -1 * TRANSLATE_CONSTANT);
     break;
