@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# CMake build
+mathclass/build/*
+src/build/*

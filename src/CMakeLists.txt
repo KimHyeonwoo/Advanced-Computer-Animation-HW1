@@ -31,3 +31,13 @@ file(GLOB srcs "test_matrix.cpp")
 add_executable(test_matrix ${srcs})
 target_link_libraries(test_matrix ${MATHCLASS_LIBRARIES})
 
+project(HW1)
+add_compile_options(-std=gnu++11)
+
+file (GLOB srcs "hw1.cpp")
+
+add_executable(hw1 ${srcs})
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
+target_link_libraries(hw1 ${MATHCLASS_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
