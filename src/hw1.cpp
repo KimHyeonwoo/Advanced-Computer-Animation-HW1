@@ -20,6 +20,7 @@ GLdouble rotMatrix[16] =
 int width, height;
 
 bool leftButton = false;
+bool rightButton = false;
 GLfloat mousePosX, mousePosY;
 
 /* vectors that makes the rotation and translation of the cube */
@@ -46,21 +47,32 @@ void loadGlobalCoord()
 	glMultMatrixd(rotMatrix);
 }
 
+#define TRANSLATE_CONSTANT 0.5
+
+void translate(vector v, double len) {
+  vector transVec = v * len;
+  eye += transVec;
+  ori += transVec;
+  loadGlobalCoord();
+}
+
 //------------------------------------------------------------------------
 // Moves the screen based on mouse pressed button
 //------------------------------------------------------------------------
 
 void glutMotion(int x, int y)
 {
-	if ( leftButton ) {
-		float dx = x - mousePosX;
-		float dy = y - mousePosY;
+	if ( rightButton ) {
+		double dx = x - mousePosX;
+		double dy = y - mousePosY;
 
 		mousePosX = x;
 		mousePosY = y;
 
-		ori[0] -= dx*0.04;
-		ori[1] += dy*0.04;
+    vector transVec = loadBasisX() * -1 * dx + loadBasisY() * dy;
+    position delta(dx, dy, 0);
+    double len = delta.norm() * 0.002;
+    translate(transVec, len);
 
 		loadGlobalCoord();
 	}
@@ -75,18 +87,19 @@ void glutMouse(int button, int state, int x, int y)
 	switch ( button )
 	{
 		case GLUT_LEFT_BUTTON:
+			break;
+		case GLUT_RIGHT_BUTTON:
 			if ( state == GLUT_DOWN )
 			{
 				mousePosX = x;
 				mousePosY = y;
-				leftButton = true;
+				rightButton = true;
 			}
 			else if ( state == GLUT_UP )
 			{
-				leftButton = false;
+				rightButton = false;
 			}
 			break;
-		case GLUT_RIGHT_BUTTON:break;
 		case 3:break;
 		default:break;
 	}
@@ -400,15 +413,6 @@ void resize(int w, int h) {
 	gluPerspective(45.0f, (GLfloat)w / (GLfloat)h, .1f, 500.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-#define TRANSLATE_CONSTANT 0.5
-
-void translate(vector v, double len) {
-  vector transVec = v * len;
-  eye += transVec;
-  ori += transVec;
-  loadGlobalCoord();
 }
 
 void keyboard(unsigned char key, int x, int y) {
