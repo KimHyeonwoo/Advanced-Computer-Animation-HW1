@@ -207,7 +207,7 @@ void cube(position p1, position p2) {
   glVertex3f(p1.x(), p2.y(), p1.z());
   glEnd();
 */
-  glColor3f(46.0 / 255, 86.0 / 255, 184.0 / 255);
+  glColor3f(46.0 / 255, 126.0 / 255, 184.0 / 255);
   glBegin(GL_POLYGON);
   glVertex3f(p2.x(), p2.y(), p1.z());
   glVertex3f(p2.x(), p1.y(), p1.z());
@@ -224,7 +224,7 @@ void cube(position p1, position p2) {
   glVertex3f(p2.x(), p2.y(), p1.z());
   glEnd();
 */
-  glColor3f(86.0 / 255, 46.0 / 255, 184.0 / 255);
+  glColor3f(126.0 / 255, 46.0 / 255, 184.0 / 255);
   glBegin(GL_POLYGON);
   glVertex3f(p2.x(), p1.y(), p1.z());
   glVertex3f(p1.x(), p1.y(), p1.z());
