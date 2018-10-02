@@ -1,5 +1,7 @@
 # Advanced Computer Animation HW1
 
+![](fig.png)
+
 ### Compile instruction
 
 ```
