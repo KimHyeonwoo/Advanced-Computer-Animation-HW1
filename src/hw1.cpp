@@ -98,8 +98,8 @@ void translate(vector v, double len) {
 void glutMotion(int x, int y)
 {
   if (leftButton) {
-    double trackballX = (x - 1000.0f) / 20;
-    double trackballY = (1000.0f - y) / 20;
+    double trackballX = (x - 350.0f) / 7;
+    double trackballY = (350.0f - y) / 7;
     double trackballZ;
     position tmp(trackballX, trackballY, 0);
     double length = tmp.norm();
@@ -154,8 +154,8 @@ void glutMouse(int button, int state, int x, int y)
 		case GLUT_LEFT_BUTTON:
       if (state == GLUT_DOWN)
       {
-        lastX = (x - 1000.0f) / 20;
-        lastY = (1000.0f - y) / 20;
+        lastX = (x - 350.0f) / 7;
+        lastY = (350.0f - y) / 7;
         position tmp(lastX, lastY, 0);
         double length = tmp.norm();
 
@@ -735,7 +735,7 @@ void Timer(int unused)
 int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(2000, 2000);
+	glutInitWindowSize(700, 700);
 	glutInitWindowPosition( 50, 0 );
 	glutCreateWindow("Example");
   glEnable(GL_DEPTH_TEST);
