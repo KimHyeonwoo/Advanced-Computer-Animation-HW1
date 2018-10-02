@@ -506,9 +506,9 @@ int main(int argc, char **argv) {
 	glutInitWindowSize(2000, 2000);
 	glutInitWindowPosition( 50, 0 );
 	glutCreateWindow("Example");
+  glEnable(GL_DEPTH_TEST);
 
 //  glClearColor(1.0, 1.0, 1.0, 0.0);
-
 	glutReshapeFunc(resize);
 	glutDisplayFunc(display);
 	glutTimerFunc(timeStep, Timer, 0);
