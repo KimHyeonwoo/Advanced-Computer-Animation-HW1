@@ -2,7 +2,7 @@
 
 ### Compile instruction
 
-'''
+```
 cd path/to/hw1
 cd mathclass
 mkdir build
@@ -15,4 +15,4 @@ cd build
 cmake ..
 make
 ./hw1
-'''
+```
